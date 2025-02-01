@@ -72,6 +72,5 @@ def process_image(image_path, operations, output_directory):
     output_extension = output_format if output_format else image.format.lower()
     output_path = os.path.join(output_directory, f"{file_name}.{output_extension}")
 
-    # Save processed image
     image.save(output_path, format=output_format.upper() if output_format else image.format)
     print(f"Processed and saved: {output_path}")
