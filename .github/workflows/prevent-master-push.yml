@@ -1,6 +1,14 @@
 name: Prevent Direct Push to Master
 
-on: push
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
 
 jobs:
   block-direct-push:
@@ -11,7 +19,13 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
+          # Check if the push is to master or main
           if [[ "$BRANCH_NAME" == "master" || "$BRANCH_NAME" == "main" ]]; then
+            if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+              echo "✅ PR is being merged. Allowed."
+              exit 0
+            fi
+
             if [[ "$COMMIT_MESSAGE" == *"Merge pull request"* ]]; then
               echo "✅ This is a merge commit from a PR. Allowed."
               exit 0
