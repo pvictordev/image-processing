@@ -1,0 +1,15 @@
+name: Prevent Direct Push to Master
+
+on: push # Runs on every push
+
+jobs:
+  block-direct-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block if pushing to master
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          if [[ "$BRANCH_NAME" == "master" || "$BRANCH_NAME" == "main" ]]; then
+            echo "🚨 Direct pushes to $BRANCH_NAME are not allowed! Use a pull request instead."
+            exit 1
+          fi
