@@ -1,0 +1,16 @@
+{
+  "images": ["images/image1.png", "images/image2.png"],
+  "operations": [
+    { "type": "resize", "width": 300, "height": 300 },
+    { "type": "rotate", "angle": 90 },
+    { "type": "grayscale" },
+    {
+      "type": "add_text",
+      "text": "Watermark",
+      "position": [50, 50],
+      "font_size": 24
+    },
+    { "type": "save_format", "format": "png" }
+  ],
+  "output_directory": "processed_images/"
+}
