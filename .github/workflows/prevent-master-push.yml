@@ -1,20 +1,14 @@
-name: Prevent Direct Push to Master
-
-on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
-    branches:
-      - master
-      - main
-
 jobs:
-  block-direct-push:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check if push is to master
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Run the script to check the branch and commit message
+      - name: Check push behavior
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
@@ -22,15 +16,15 @@ jobs:
           # Check if the push is to master or main
           if [[ "$BRANCH_NAME" == "master" || "$BRANCH_NAME" == "main" ]]; then
             if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
-              echo "✅ PR is being merged. Allowed."
+              echo "PR is being merged. Allowed."
               exit 0
             fi
 
             if [[ "$COMMIT_MESSAGE" == *"Merge pull request"* ]]; then
-              echo "✅ This is a merge commit from a PR. Allowed."
+              echo "This is a merge commit from a PR. Allowed."
               exit 0
             fi
 
-            echo "🚨 Direct pushes to $BRANCH_NAME are not allowed! Use a pull request instead."
+            echo "Direct pushes to $BRANCH_NAME are not allowed! Use a pull request instead."
             exit 1
           fi

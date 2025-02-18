@@ -12,3 +12,11 @@ Batch image processing script that supports resizing, rotating, grayscale conver
 - Invert colors
 - Add text watermark
 - Save images in different formats
+
+## How to run
+
+1. Clone the repo
+
+2. cd into it
+
+3. `bash run.sh`
